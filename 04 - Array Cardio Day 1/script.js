@@ -15,26 +15,31 @@ const inventors = [
   { first: "Hanna", last: "Hammarström", year: 1829, passed: 1909 },
 ];
 
-// Array.prototype.filter()
-// 1. Filter the list of inventors for those who were born in the 1500's
+// * The Array filter() Method is ONLY for selecting items based on a condition: true/false
+// 1. Creates a new array with only the elements that pass the callback function
+// 3. It does NOT modify the original array
+// 2. If the callback operation returns true, it gets added to the new array, if false, discard it
+// TODO: Filter the list of inventors for those who were born in the 1500's
 const bornIn1500s = inventors.filter((inventor) => {
-  if (inventor.year >= 1500 && inventor.year < 1600) {
+  if (inventor.year >= 1500 && inventor.year <= 1599) {
     return true;
   }
 });
-
 console.table(bornIn1500s);
 
-// Array.prototype.map()
-// 2. Map the array of the inventor's first and last names
-const fullNames = inventors.map(
-  (inventor) => `${inventor.first} ${inventor.last}`
-);
-
+// * The Array map() Method transforms each item in an array and returns a new array with the results
+// 1. Does NOT modify the original array
+// 2. Always returns a new array of the same length as the original
+// 3. The callback function defines how each item is transformed
+// TODO: Map the array of the inventor's first and last names
+const fullNames = inventors.map((inventor) => {
+  return `${inventor.first} ${inventor.last}`;
+});
 console.table(fullNames);
 
-// Array.prototype.sort()
-// 3. Sort the inventors by birthdate, oldest to youngest
+// * The Array sort() Method sorts elements of an array in place
+// 1. It will change the original array
+// TODO: Sort the inventors by birthdate, oldest to youngest
 const oldestToYoungest = inventors.sort(function (a, b) {
   if (a.year > b.year) {
     return 1;
@@ -42,39 +47,80 @@ const oldestToYoungest = inventors.sort(function (a, b) {
     return -1;
   }
 });
-
 console.table(oldestToYoungest);
 
-// * Array.prototype.reduce()
-// 4. How many total years did all of the inventors live?
+// * The Array reduce() Method boils an array down to a single value, this could be sum, average, etc
+// 1. The callback function processes each item
+// 2. "total" tracks the cumulative value
+// 3. Initial value is by default set to 0
+// TODO: How many total years did all of the inventors live?
 const totalYearsLived = inventors.reduce((total, inventor) => {
   return total + (inventor.passed - inventor.year);
 }, 0);
-
 console.log(totalYearsLived);
 
-// 5. Sort the inventors by years lived
+// TODO: Sort the inventors by years lived
 const oldestInventors = inventors.sort(function (a, b) {
   const lastInventor = a.passed - a.year;
   const nextInventor = b.passed - b.year;
+
   if (lastInventor > nextInventor) {
     return -1;
   } else {
     return 1;
   }
 });
-
 console.table(oldestInventors);
 
-// 6. Create a list of Boulevards in Paris that contain 'de' anywhere in the name https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-// const category = document.querySelector(".mw-category");
-// const links = Array.from(category.querySelectorAll("a"));
+// TODO: Create a list of Boulevards in Paris that contain 'de' anywhere in the name
+const parisStreets = [
+  "Boulevards of Paris",
+  "City walls of Paris",
+  "Thiers wall",
+  "Wall of Charles V",
+  "Wall of Philip II Augustus",
+  "City gates of Paris",
+  "Haussmann's renovation of Paris",
+  "Boulevards of the Marshals",
+  "Boulevard Auguste-Blanqui",
+  "Boulevard Barbès",
+  "Boulevard Beaumarchais",
+  "Boulevard de l'Amiral-Bruix",
+  "Boulevard Mortier",
+  "Boulevard Poniatowski",
+  "Boulevard Soult",
+  "Boulevard des Capucines",
+  "Boulevard de la Chapelle",
+  "Boulevard de Clichy",
+  "Boulevard du Crime",
+  "Boulevard du Général-d'Armée-Jean-Simon",
+  "Boulevard Haussmann",
+  "Boulevard de l'Hôpital",
+  "Boulevard des Italiens",
+  "Boulevard Lefebvre",
+  "Boulevard de la Madeleine",
+  "Boulevard de Magenta",
+  "Boulevard Malesherbes",
+  "Boulevard Marguerite-de-Rochechouart",
+  "Boulevard Montmartre",
+  "Boulevard du Montparnasse",
+  "Boulevard Raspail",
+  "Boulevard Richard-Lenoir",
+  "Boulevard Saint-Germain",
+  "Boulevard Saint-Michel",
+  "Boulevard de Sébastopol",
+  "Boulevard de Strasbourg",
+  "Boulevard du Temple",
+  "Boulevard Voltaire",
+  "Boulevard Hippolyte-Marquès",
+];
 
-// const de = links
-//   .map((link) => link.textContent)
-//   .filter((streetName) => streetName.includes("de"));
+const deStreets = parisStreets.filter((streetName) =>
+  streetName.includes("de")
+);
+console.table(deStreets);
 
-// 7. Sort the people alphabetically by last name in the people array
+// TODO: Sort the people alphabetically by last name in the people array
 const people = [
   "Bernhard, Sandra",
   "Bethea, Erin",
@@ -128,10 +174,9 @@ const lastNameAlphaSort = people.sort(function (lastPerson, nextPerson) {
     return -1;
   }
 });
+console.table(lastNameAlphaSort);
 
-console.log(lastNameAlphaSort);
-
-// 8. Sum up the instances of each item in the transporation array
+// TODO: Sum up the instances of each item in the transporation array
 const transportation = [
   "car",
   "car",
@@ -156,5 +201,4 @@ const instancesOfTransporation = transportation.reduce(function (obj, item) {
   obj[item]++;
   return obj;
 }, {});
-
-console.log(instancesOfTransporation);
+console.table(instancesOfTransporation);
