@@ -8,11 +8,20 @@ function getVideo() {
   navigator.mediaDevices
     .getUserMedia({ video: true, audio: false })
     .then((localMediaStream) => {
+      console.log(localMediaStream);
+
+      // DEPRECIATION:
+      // The following has been depreceated by major browsers as of Chrome and Firefox
+      // video.src = window.URL.createObjectURL(localMediaStream);
+      // Please refer to these:
+      // Deprecated - https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+      // Newer Syntax - https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject
+
       video.srcObject = localMediaStream;
       video.play();
     })
-    .catch((error) => {
-      console.error("Please allow access to the camera", error);
+    .catch((err) => {
+      console.error(`OH NO!!!`, err);
     });
 }
 
@@ -27,32 +36,33 @@ function paintToCanvas() {
     // Take the pixels out
     let pixels = ctx.getImageData(0, 0, width, height);
     // Mess with them
-    pixels = redEffect(pixels);
-    // pixels = rgbSplit(pixels);
-    // pixels = greenScreen(pixels);
+    // pixels = redEffect(pixels);
+
+    pixels = rgbSplit(pixels);
     // ctx.globalAlpha = 0.8;
 
+    // pixels = greenScreen(pixels);
     // Put them back
     ctx.putImageData(pixels, 0, 0);
   }, 16);
 }
 
 function takePhoto() {
-  // Play the sound
+  // Played the sound
   snap.currentTime = 0;
   snap.play();
 
-  // Take data out of canvas
+  // Take the data out of the canvas
   const data = canvas.toDataURL("image/jpeg");
   const link = document.createElement("a");
   link.href = data;
-  link.setAttribute("download", "Photo Booth");
+  link.setAttribute("download", "handsome");
   link.innerHTML = `<img src="${data}" alt="Handsome Man" />`;
   strip.insertBefore(link, strip.firstChild);
 }
 
 function redEffect(pixels) {
-  for (i = 0; i < pixels.data.length; i = i + 4) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
     pixels.data[i + 0] = pixels.data[i + 0] + 200; // RED
     pixels.data[i + 1] = pixels.data[i + 1] - 50; // GREEN
     pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // BLUE
@@ -61,7 +71,7 @@ function redEffect(pixels) {
 }
 
 function rgbSplit(pixels) {
-  for (let i = 0; i < pixels.data.length; i = i + 4) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
     pixels.data[i - 150] = pixels.data[i + 0]; // RED
     pixels.data[i + 500] = pixels.data[i + 1]; // GREEN
     pixels.data[i - 550] = pixels.data[i + 2]; // BLUE
@@ -90,7 +100,7 @@ function greenScreen(pixels) {
       green <= levels.gmax &&
       blue <= levels.bmax
     ) {
-      // Take it out
+      // Take it out!
       pixels.data[i + 3] = 0;
     }
   }
